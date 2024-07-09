@@ -1,28 +1,10 @@
 let score = 0;
 let currentBoatImage = 'boat1.png';
-let nickname = '';
 
-document.getElementById('play-button').addEventListener('click', startGame);
-document.getElementById('start-button').addEventListener('click', startGameSession);
+document.getElementById('start-button').addEventListener('click', startGame);
 document.getElementById('game-area').addEventListener('click', collectCoin);
 
 function startGame() {
-    nickname = document.getElementById('nickname-input').value;
-    if (nickname) {
-        document.getElementById('nickname-display').textContent = `Nickname: ${nickname}`;
-        document.getElementById('start-screen').classList.remove('active');
-        document.getElementById('game-container').classList.add('active');
-        score = 0;
-        currentBoatImage = 'boat1.png';
-        document.getElementById('score').textContent = score;
-        clearGameArea();
-        createBoat();
-    } else {
-        alert('Please enter a nickname.');
-    }
-}
-
-function startGameSession() {
     score = 0;
     currentBoatImage = 'boat1.png';
     document.getElementById('score').textContent = score;
@@ -32,6 +14,7 @@ function startGameSession() {
 
 function createBoat() {
     const gameArea = document.getElementById('game-area');
+    clearGameArea();
     const boat = document.createElement('div');
     boat.classList.add('boat');
     boat.style.backgroundImage = `url(${currentBoatImage})`;
@@ -40,7 +23,7 @@ function createBoat() {
 }
 
 function collectCoin(event) {
-    if (event.target.id === 'game-area' || event.target.id === 'boat') {
+    if (event.target.id === 'boat') {
         score++;
         document.getElementById('score').textContent = score;
         createSparkle(event.clientX, event.clientY);
