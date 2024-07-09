@@ -10,25 +10,27 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: linear-gradient(to bottom, #2c3e50, #3498db);
+    font-family: 'Source Code Pro', monospace;
+    background: #26292E;
 }
 
 #game-container {
     text-align: center;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    padding: 20px;
+    padding: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    color: white;
+    color: #F4F4F4;
     width: 90%;
     max-width: 600px;
+    position: relative; /* For positioning the boost button */
 }
 
 h1 {
     margin: 0;
-    font-size: 2.5em;
-    color: #ecf0f1;
+    font-size: 2em;
+    color: #F4F4F4;
+    text-align: left; /* Left align the header */
 }
 
 #nickname-input {
@@ -39,28 +41,76 @@ h1 {
     border: 1px solid #ccc;
     width: 80%;
     max-width: 300px;
+    background: #1B1E23;
+    color: #F4F4F4;
 }
 
-#nickname-display {
+#nickname-display, #score-board {
     margin: 10px 0;
-    font-size: 1.5em;
-    color: #ecf0f1;
+    font-size: 1.2em;
+    color: #F4F4F4;
+    text-align: left; /* Left align the nickname and score */
 }
 
-#score-board {
+#progress-bar-container, #energy-bar-container {
+    width: 100%;
+    height: 15px;
+    background: #34495e;
+    border-radius: 10px;
     margin: 10px 0;
-    font-size: 1.5em;
-    color: #ecf0f1;
+}
+
+#progress-bar, #energy-bar {
+    height: 100%;
+    background: #2ecc71;
+    border-radius: 10px;
+    transition: width 0.3s;
+}
+
+#tasks-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+    font-size: 0.9em;
+}
+
+.task {
+    background: #34495e;
+    padding: 5px;
+    border-radius: 10px;
+    position: relative;
+    width: 30%;
+    text-align: center;
+    color: #F4F4F4;
+}
+
+.task.complete {
+    background: #2ecc71;
+}
+
+.complete-mark {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 15px;
+    height: 15px;
+    background: red;
+    border-radius: 50%;
+    display: none;
+}
+
+.task.complete .complete-mark {
+    display: block;
 }
 
 #game-area {
     width: 100%;
-    height: 50vh;
+    height: 40vh;
     position: relative;
     overflow: hidden;
     border: 2px solid #34495e;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
+    background: #1B1E23;
     cursor: pointer;
 }
 
@@ -75,7 +125,21 @@ h1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(10, 0, 0, 0); /* Transparent background color */
+    z-index: 2; /* Ensure the boat is on top */
+}
+
+.boat::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 220px;
+    height: 220px;
+    background: transparent; /* Make the background transparent */
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(78, 92, 228, 0.5);
+    transform: translate(-50%, -50%);
+    z-index: 1; /* Ensure the circle is behind the boat */
 }
 
 .sparkle {
@@ -86,6 +150,7 @@ h1 {
     border-radius: 50%;
     pointer-events: none;
     animation: sparkle 0.5s ease-out;
+    z-index: 3; /* Ensure the sparkle is above the boat */
 }
 
 @keyframes sparkle {
@@ -100,11 +165,11 @@ h1 {
 }
 
 #start-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
     background-color: #e74c3c;
-    color: white;
+    color: #F4F4F4;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -114,27 +179,44 @@ h1 {
     background-color: #c0392b;
 }
 
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2em;
-    }
-
-    #score-board {
-        font-size: 1.2em;
-    }
-
-    .boat {
-        width: 150px;
-        height: 150px;
-    }
-
-    #game-area {
-        height: 40vh;
-    }
+#music-toggle-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #3498db;
+    color: #F4F4F4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-@media (max-width: 480px) {
+#music-toggle-button:hover {
+    background-color: #2980b9;
+}
+
+#boost-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #2ecc71;
+    color: #F4F4F4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none; /* Initially hidden */
+}
+
+#boost-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+#boost-button:hover:enabled {
+    background-color: #27ae60;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
     h1 {
         font-size: 1.5em;
     }
@@ -144,26 +226,50 @@ h1 {
     }
 
     .boat {
+        width: 150px;
+        height: 150px;
+    }
+
+    .boat::before {
+        width: 170px;
+        height: 170px;
+    }
+
+    #game-area {
+        height: 35vh;
+    }
+
+    .task {
+        width: 30%;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2em;
+    }
+
+    #score-board {
+        font-size: 0.9em;
+    }
+
+    .boat {
         width: 120px;
         height: 120px;
+    }
+
+    .boat::before {
+        width: 140px;
+        height: 140px;
     }
 
     #game-area {
         height: 30vh;
     }
-}
 
-#music-toggle-button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#music-toggle-button:hover {
-    background-color: #2980b9;
+    .task {
+        width: 45%;
+        font-size: 0.7em;
+    }
 }

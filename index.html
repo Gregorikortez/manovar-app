@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manovar App</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
     <meta name="robots" content="noindex, nofollow">
     <meta property="og:title" content="Manovar App">
     <meta property="og:description" content="Click the boat to earn coins!">
@@ -16,12 +17,33 @@
         <h1>Manovar App</h1>
         <input type="text" id="nickname-input" placeholder="Enter your nickname">
         <div id="nickname-display"></div> <!-- New element to display the nickname -->
-        <div id="score-board">Coins: <span id="score">0</span></div>
+        <div id="score-board">Coins: <span id="score">0 💰</span></div>
+        <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
+        <div id="energy-bar-container">
+            <div id="energy-bar"></div>
+        </div>
+        <div id="tasks-container">
+            <div class="task" id="task-1">
+                <span>10 Clicks 🖱️</span>
+                <div class="complete-mark"></div>
+            </div>
+            <div class="task" id="task-2">
+                <span>Upgrade Boat 🚢</span>
+                <div class="complete-mark"></div>
+            </div>
+            <div class="task" id="task-3">
+                <span>Made by horhegeorge ☕</span>
+                <div class="complete-mark"></div>
+            </div>
+        </div>
         <div id="game-area"></div>
         <button id="start-button">Start Game</button>
         <button id="music-toggle-button">Toggle Music</button> <!-- New button to toggle music -->
-        <audio id="background-music" loop>
-            <source src="audio/background-music.mp3" type="audio/mpeg">
+        <button id="boost-button">Boost</button> <!-- New button for Boost -->
+        <audio id="click-sound">
+            <source src="audio/click-sound.mp3" type="audio/mpeg">
         </audio>
     </div>
     <script src="script.js"></script>

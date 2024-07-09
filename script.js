@@ -1,7 +1,16 @@
 let score = 0;
 let currentBoatImage = 'images/boat1.png'; // Ensure this path is correct
 const backgroundMusic = document.getElementById('background-music');
+const clickSound = document.getElementById('click-sound');
 const musicToggleButton = document.getElementById('music-toggle-button');
+const progressBar = document.getElementById('progress-bar');
+const energyBar = document.getElementById('energy-bar');
+const boostButton = document.getElementById('boost-button');
+let energy = 1000;
+const maxEnergy = 1000;
+const energyRegenerationRate = 5 * 1000; // 5 seconds
+const boostCooldownTime = 10 * 60 * 1000; // 10 minutes
+let boostAvailable = true;
 
 document.getElementById('start-button').addEventListener('click', startGame);
 document.getElementById('nickname-input').addEventListener('keypress', function(event) {
@@ -12,6 +21,7 @@ document.getElementById('nickname-input').addEventListener('keypress', function(
 document.getElementById('game-area').addEventListener('touchstart', collectCoin); // Use touchstart for better mobile performance
 document.getElementById('game-area').addEventListener('click', collectCoin);
 musicToggleButton.addEventListener('click', toggleMusic);
+boostButton.addEventListener('click', useBoost);
 
 function startGame() {
     console.log("Start game button clicked");
@@ -28,10 +38,15 @@ function startGame() {
     nicknameInput.style.display = 'none'; // Hide input after starting the game
     startButton.style.display = 'none'; // Hide the start button after starting the game
     musicToggleButton.style.display = 'block'; // Show the music toggle button
+    boostButton.style.display = 'block'; // Show the boost button
     score = 0;
-    currentBoatImage = 'images/boat1.png'; // Ensure this path is correct
-    document.getElementById('score').textContent = score;
+    energy = maxEnergy; // Reset energy
+    boostAvailable = true; // Reset boost availability
+    updateScoreDisplay();
+    updateEnergyDisplay();
     createBoat();
+    startEnergyRegeneration();
+    resetTasks();
 }
 
 function createBoat() {
@@ -41,12 +56,21 @@ function createBoat() {
     if (existingBoat) {
         gameArea.removeChild(existingBoat);
     }
+    const boatContainer = document.createElement('div');
+    boatContainer.style.position = 'relative';
+    boatContainer.style.width = '100%';
+    boatContainer.style.height = '100%';
+    boatContainer.style.display = 'flex';
+    boatContainer.style.justifyContent = 'center';
+    boatContainer.style.alignItems = 'center';
+    gameArea.appendChild(boatContainer);
+
     const boat = document.createElement('div');
     boat.classList.add('boat');
     boat.style.backgroundImage = `url(${currentBoatImage})`;
     boat.id = 'boat';
     boat.addEventListener('click', collectCoin); // Add event listener directly to the boat
-    gameArea.appendChild(boat);
+    boatContainer.appendChild(boat);
     console.log("Boat created and added to game area", boat);
     console.log("Boat styles:", window.getComputedStyle(boat).backgroundImage);
     console.log("Game area innerHTML:", gameArea.innerHTML);
@@ -55,11 +79,21 @@ function createBoat() {
 function collectCoin(event) {
     console.log("Collect coin event triggered");
     if (event.target.id === 'boat') {
-        score++;
-        document.getElementById('score').textContent = score;
-        createSparkle(event.clientX, event.clientY);
-        updateBoatImage();
-        console.log("Score updated to", score);
+        if (energy > 0) {
+            score++;
+            energy--;
+            updateScoreDisplay();
+            updateEnergyDisplay();
+            createSparkle(event.clientX, event.clientY);
+            updateBoatImage();
+            updateProgressBar();
+            clickSound.play(); // Play the click sound
+            checkTasks();
+            console.log("Score updated to", score);
+            console.log("Energy updated to", energy);
+        } else {
+            alert("Not enough energy!");
+        }
     } else {
         console.log("Click not on boat, but on", event.target);
     }
@@ -82,6 +116,7 @@ function createSparkle(x, y) {
 function updateBoatImage() {
     if (score >= 100) {
         currentBoatImage = 'images/boat3.png'; // Ensure this path is correct
+        markTaskComplete(2); // Complete the upgrade boat task
     } else if (score >= 50) {
         currentBoatImage = 'images/boat2.png'; // Ensure this path is correct
     } else {
@@ -105,6 +140,79 @@ function toggleMusic() {
     }
 }
 
+function updateScoreDisplay() {
+    document.getElementById('score').textContent = `${score} 💰`;
+}
+
+function updateEnergyDisplay() {
+    energyBar.style.width = `${(energy / maxEnergy) * 100}%`;
+}
+
+function updateProgressBar() {
+    let levelProgress;
+    if (score >= 100) {
+        levelProgress = 100; // Max level progress for level 3
+    } else if (score >= 50) {
+        levelProgress = (score - 50) * 2; // Level 2 progress
+    } else {
+        levelProgress = score * 2; // Level 1 progress
+    }
+    progressBar.style.width = `${levelProgress}%`;
+}
+
+function startEnergyRegeneration() {
+    setInterval(() => {
+        if (energy < maxEnergy) {
+            energy++;
+            updateEnergyDisplay();
+            console.log("Energy regenerated to", energy);
+        }
+    }, energyRegenerationRate);
+}
+
+function useBoost() {
+    if (boostAvailable) {
+        energy = maxEnergy;
+        updateEnergyDisplay();
+        boostAvailable = false;
+        boostButton.disabled = true;
+        startBoostCooldown();
+    }
+}
+
+function startBoostCooldown() {
+    let remainingCooldown = boostCooldownTime / 1000;
+    const countdownInterval = setInterval(() => {
+        remainingCooldown--;
+        boostButton.textContent = `Boost (${remainingCooldown}s)`;
+        if (remainingCooldown <= 0) {
+            clearInterval(countdownInterval);
+            boostAvailable = true;
+            boostButton.disabled = false;
+            boostButton.textContent = "Boost";
+        }
+    }, 1000);
+}
+
+function checkTasks() {
+    if (score >= 10) {
+        markTaskComplete(1); // Complete the 10 clicks task
+    }
+}
+
+function markTaskComplete(taskNumber) {
+    const task = document.getElementById(`task-${taskNumber}`);
+    if (task && !task.classList.contains('complete')) {
+        task.classList.add('complete');
+        console.log(`Task ${taskNumber} completed`);
+    }
+}
+
+function resetTasks() {
+    const tasks = document.querySelectorAll('.task');
+    tasks.forEach(task => task.classList.remove('complete'));
+}
+
 // Export functions for testing
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -113,6 +221,15 @@ if (typeof module !== 'undefined' && module.exports) {
         collectCoin,
         updateBoatImage,
         createSparkle,
-        toggleMusic
+        toggleMusic,
+        updateScoreDisplay,
+        updateEnergyDisplay,
+        updateProgressBar,
+        startEnergyRegeneration,
+        useBoost,
+        startBoostCooldown,
+        checkTasks,
+        markTaskComplete,
+        resetTasks
     };
 }
