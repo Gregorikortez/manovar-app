@@ -16,6 +16,7 @@ document.getElementById('start-button').addEventListener('click', startGame);
 document.getElementById('nickname-input').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
         startGame();
+        this.blur(); // Hide the keyboard on mobile devices
     }
 });
 document.getElementById('game-area').addEventListener('touchstart', collectCoin); // Use touchstart for better mobile performance
