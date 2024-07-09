@@ -2,6 +2,11 @@ let score = 0;
 let currentBoatImage = 'images/boat1.png'; // Ensure this path is correct
 
 document.getElementById('start-button').addEventListener('click', startGame);
+document.getElementById('nickname-input').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        startGame();
+    }
+});
 document.getElementById('game-area').addEventListener('touchstart', collectCoin); // Use touchstart for better mobile performance
 document.getElementById('game-area').addEventListener('click', collectCoin);
 
@@ -9,6 +14,7 @@ function startGame() {
     console.log("Start game button clicked");
     const nicknameInput = document.getElementById('nickname-input');
     const nicknameDisplay = document.getElementById('nickname-display');
+    const startButton = document.getElementById('start-button');
     const nickname = nicknameInput.value.trim();
     if (nickname === "") {
         alert("Please enter your nickname.");
@@ -17,6 +23,7 @@ function startGame() {
     nicknameDisplay.textContent = `Player: ${nickname}`; // Display the nickname
     nicknameInput.disabled = true; // Disable input after starting the game
     nicknameInput.style.display = 'none'; // Hide input after starting the game
+    startButton.style.display = 'none'; // Hide the start button after starting the game
     score = 0;
     currentBoatImage = 'images/boat1.png'; // Ensure this path is correct
     document.getElementById('score').textContent = score;
