@@ -1,40 +1,48 @@
 let score = 0;
-let gameInterval;
 let currentBoatImage = 'boat1.png';
+let nickname = '';
 
-document.getElementById('start-button').addEventListener('click', startGame);
+document.getElementById('play-button').addEventListener('click', startGame);
+document.getElementById('start-button').addEventListener('click', startGameSession);
 document.getElementById('game-area').addEventListener('click', collectCoin);
 
 function startGame() {
+    nickname = document.getElementById('nickname-input').value;
+    if (nickname) {
+        document.getElementById('nickname-display').textContent = `Nickname: ${nickname}`;
+        document.getElementById('start-screen').classList.remove('active');
+        document.getElementById('game-container').classList.add('active');
+        score = 0;
+        currentBoatImage = 'boat1.png';
+        document.getElementById('score').textContent = score;
+        clearGameArea();
+        createBoat();
+    } else {
+        alert('Please enter a nickname.');
+    }
+}
+
+function startGameSession() {
     score = 0;
     currentBoatImage = 'boat1.png';
     document.getElementById('score').textContent = score;
-    clearGameArea();  // Clear any remaining boats from previous game
-    gameInterval = setInterval(createBoat, 1000);
-    setTimeout(stopGame, 30000); // Game lasts 30 seconds
+    clearGameArea();
+    createBoat();
 }
 
 function createBoat() {
     const gameArea = document.getElementById('game-area');
     const boat = document.createElement('div');
     boat.classList.add('boat');
-    boat.style.top = `${Math.random() * (gameArea.clientHeight - 50)}px`; // Adjusted for boat height
-    boat.style.left = `${Math.random() * (gameArea.clientWidth - 50)}px`; // Adjusted for boat width
     boat.style.backgroundImage = `url(${currentBoatImage})`;
+    boat.id = 'boat';
     gameArea.appendChild(boat);
-
-    setTimeout(() => {
-        if (boat) boat.remove();
-    }, 3000); // Boat disappears after 3 seconds
 }
 
 function collectCoin(event) {
-    if (event.target.id === 'game-area' || event.target.classList.contains('boat')) {
+    if (event.target.id === 'game-area' || event.target.id === 'boat') {
         score++;
         document.getElementById('score').textContent = score;
-        if (event.target.classList.contains('boat')) {
-            event.target.remove();
-        }
         createSparkle(event.clientX, event.clientY);
         updateBoatImage();
     }
@@ -61,12 +69,11 @@ function updateBoatImage() {
     } else {
         currentBoatImage = 'boat1.png';
     }
-}
 
-function stopGame() {
-    clearInterval(gameInterval);
-    alert(`Game Over! You collected ${score} coins.`);
-    clearGameArea();
+    const boat = document.getElementById('boat');
+    if (boat) {
+        boat.style.backgroundImage = `url(${currentBoatImage})`;
+    }
 }
 
 function clearGameArea() {
@@ -82,7 +89,6 @@ if (typeof module !== 'undefined' && module.exports) {
         startGame,
         createBoat,
         collectCoin,
-        stopGame,
         clearGameArea,
         updateBoatImage,
         createSparkle

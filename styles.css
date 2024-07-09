@@ -1,13 +1,70 @@
-@keyframes pop {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-    }
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom, #2c3e50, #3498db);
+    margin: 0;
+    overflow: hidden;
+}
+
+#start-screen, #game-container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    color: white;
+    display: none;
+}
+
+#start-screen.active, #game-container.active {
+    display: block;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: #ecf0f1;
+}
+
+#score-board, #nickname-display {
+    margin: 10px 0;
+    font-size: 1.5em;
+    color: #ecf0f1;
+}
+
+#game-area {
+    width: 100%;
+    height: 60vh;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #34495e;
+    border-radius: 10px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.boat {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background-size: cover;
+    cursor: pointer;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.sparkle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: gold;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: sparkle 0.5s ease-out;
 }
 
 @keyframes sparkle {
@@ -21,79 +78,24 @@
     }
 }
 
-body {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(to bottom, #87cefa, #4682b4);
-    margin: 0;
-    overflow: hidden;
-}
-
-#game-container {
-    text-align: center;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-h1 {
-    margin: 0;
-    font-size: 2em;
-    color: #333;
-}
-
-#score-board {
-    margin: 10px 0;
-    font-size: 1.5em;
-    color: #333;
-}
-
-#game-area {
-    width: 80%;
-    height: 400px;
-    margin: 0 auto;
-    background-color: #87ceeb;
-    position: relative;
-    overflow: hidden;
-    border: 2px solid #000;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.boat {
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    background-size: cover;
-    cursor: pointer;
-    animation: pop 0.3s ease;
-}
-
-.sparkle {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: gold;
-    border-radius: 50%;
-    pointer-events: none;
-    animation: sparkle 0.5s ease-out;
-}
-
-#start-button {
+#start-button, #play-button {
     margin-top: 20px;
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #4CAF50;
+    background-color: #e74c3c;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
-#start-button:hover {
-    background-color: #45a049;
+#start-button:hover, #play-button:hover {
+    background-color: #c0392b;
+}
+
+#nickname-input {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
