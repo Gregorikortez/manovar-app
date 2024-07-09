@@ -34,6 +34,16 @@ h1 {
     color: #ecf0f1;
 }
 
+#nickname-input {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 80%;
+    max-width: 300px;
+}
+
 #score-board {
     margin: 10px 0;
     font-size: 1.5em;

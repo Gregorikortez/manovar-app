@@ -1,11 +1,18 @@
 let score = 0;
 let currentBoatImage = 'boat1.png';
-let nickname = prompt('Enter your nickname:');
 
 document.getElementById('start-button').addEventListener('click', startGame);
 document.getElementById('game-area').addEventListener('click', collectCoin);
 
 function startGame() {
+    const nicknameInput = document.getElementById('nickname-input');
+    const nickname = nicknameInput.value.trim();
+    if (nickname === "") {
+        alert("Please enter your nickname.");
+        return;
+    }
+    nicknameInput.disabled = true; // Disable input after starting the game
+    nicknameInput.style.display = 'none'; // Hide input after starting the game
     score = 0;
     currentBoatImage = 'boat1.png';
     document.getElementById('score').textContent = score;
@@ -29,7 +36,7 @@ function collectCoin(event) {
         document.getElementById('score').textContent = score;
         createSparkle(event.clientX, event.clientY);
         updateBoatImage();
-        updateScore(nickname, score); // Update the score on the backend
+        updateScore(document.getElementById('nickname-input').value.trim(), score); // Update the score on the backend
     }
 }
 
