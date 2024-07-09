@@ -1,0 +1,37 @@
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f8ff;
+}
+
+#game-container {
+    text-align: center;
+}
+
+#game-area {
+    width: 80%;
+    height: 400px;
+    margin: 0 auto;
+    background-color: #87ceeb;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #000;
+}
+
+.boat {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background-image: url('boat.png'); /* Add boat image */
+    background-size: cover;
+}
+
+#start-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
