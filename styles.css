@@ -153,6 +153,19 @@ h1 {
     z-index: 3; /* Ensure the sparkle is above the boat */
 }
 
+.level-up {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    animation: levelUpEffect 1s ease-out;
+    z-index: 4; /* Ensure the level-up effect is above everything */
+}
+
 @keyframes sparkle {
     0% {
         opacity: 1;
@@ -161,6 +174,17 @@ h1 {
     100% {
         opacity: 0;
         transform: scale(2);
+    }
+}
+
+@keyframes levelUpEffect {
+    0% {
+        opacity: 1;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.5);
     }
 }
 

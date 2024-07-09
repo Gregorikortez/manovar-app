@@ -1,5 +1,7 @@
 let score = 0;
 let currentBoatImage = 'images/boat1.png'; // Ensure this path is correct
+let currentLevel = 1;
+let clicksNeededForNextLevel = 100;
 const backgroundMusic = document.getElementById('background-music');
 const clickSound = document.getElementById('click-sound');
 const musicToggleButton = document.getElementById('music-toggle-button');
@@ -41,6 +43,8 @@ function startGame() {
     musicToggleButton.style.display = 'block'; // Show the music toggle button
     boostButton.style.display = 'block'; // Show the boost button
     score = 0;
+    currentLevel = 1;
+    clicksNeededForNextLevel = 100;
     energy = maxEnergy; // Reset energy
     boostAvailable = true; // Reset boost availability
     updateScoreDisplay();
@@ -69,6 +73,8 @@ function createBoat() {
     const boat = document.createElement('div');
     boat.classList.add('boat');
     boat.style.backgroundImage = `url(${currentBoatImage})`;
+    boat.style.width = `${200 + (currentLevel - 1) * 10}px`; // Increase boat size with level
+    boat.style.height = `${200 + (currentLevel - 1) * 10}px`; // Increase boat size with level
     boat.id = 'boat';
     boat.addEventListener('click', collectCoin); // Add event listener directly to the boat
     boatContainer.appendChild(boat);
@@ -90,6 +96,7 @@ function collectCoin(event) {
             updateProgressBar();
             clickSound.play(); // Play the click sound
             checkTasks();
+            checkLevelUp();
             console.log("Score updated to", score);
             console.log("Energy updated to", energy);
         } else {
@@ -114,14 +121,20 @@ function createSparkle(x, y) {
     }, 500); // Sparkle disappears after 0.5 seconds
 }
 
+function createLevelUpEffect() {
+    console.log("Creating level up effect");
+    const levelUpEffect = document.createElement('div');
+    levelUpEffect.classList.add('level-up');
+    document.getElementById('game-area').appendChild(levelUpEffect);
+
+    setTimeout(() => {
+        levelUpEffect.remove();
+    }, 1000); // Level up effect disappears after 1 second
+}
+
 function updateBoatImage() {
-    if (score >= 100) {
-        currentBoatImage = 'images/boat3.png'; // Ensure this path is correct
+    if (score >= clicksNeededForNextLevel) {
         markTaskComplete(2); // Complete the upgrade boat task
-    } else if (score >= 50) {
-        currentBoatImage = 'images/boat2.png'; // Ensure this path is correct
-    } else {
-        currentBoatImage = 'images/boat1.png'; // Ensure this path is correct
     }
 
     const boat = document.getElementById('boat');
@@ -129,6 +142,17 @@ function updateBoatImage() {
         boat.style.backgroundImage = `url(${currentBoatImage})`;
     }
     console.log("Updated boat image to", currentBoatImage);
+}
+
+function checkLevelUp() {
+    if (score >= clicksNeededForNextLevel) {
+        currentLevel++;
+        clicksNeededForNextLevel *= 2;
+        createLevelUpEffect();
+        createBoat();
+        updateProgressBar();
+        console.log("Leveled up to", currentLevel);
+    }
 }
 
 function toggleMusic() {
@@ -151,12 +175,12 @@ function updateEnergyDisplay() {
 
 function updateProgressBar() {
     let levelProgress;
-    if (score >= 100) {
-        levelProgress = 100; // Max level progress for level 3
+    if (score >= clicksNeededForNextLevel) {
+        levelProgress = 100; // Max level progress for level 20
     } else if (score >= 50) {
-        levelProgress = (score - 50) * 2; // Level 2 progress
+        levelProgress = ((score - (clicksNeededForNextLevel / 2)) / (clicksNeededForNextLevel / 2)) * 100; // Current level progress
     } else {
-        levelProgress = score * 2; // Level 1 progress
+        levelProgress = (score / (clicksNeededForNextLevel / 2)) * 100; // Level 1 progress
     }
     progressBar.style.width = `${levelProgress}%`;
 }
