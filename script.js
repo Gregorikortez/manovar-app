@@ -1,5 +1,6 @@
 let score = 0;
 let currentBoatImage = 'boat1.png';
+let nickname = prompt('Enter your nickname:');
 
 document.getElementById('start-button').addEventListener('click', startGame);
 document.getElementById('game-area').addEventListener('click', collectCoin);
@@ -28,6 +29,7 @@ function collectCoin(event) {
         document.getElementById('score').textContent = score;
         createSparkle(event.clientX, event.clientY);
         updateBoatImage();
+        updateScore(nickname, score); // Update the score on the backend
     }
 }
 
@@ -64,6 +66,19 @@ function clearGameArea() {
     while (gameArea.firstChild) {
         gameArea.removeChild(gameArea.firstChild);
     }
+}
+
+function updateScore(nickname, score) {
+    fetch('http://your-vm-ip:3000/update-score', { // Replace with your VM's IP
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ nickname, score })
+    })
+    .then(response => response.text())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
 }
 
 // Export functions for testing
