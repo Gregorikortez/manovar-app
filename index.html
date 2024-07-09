@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <meta name="robots" content="noindex, nofollow">
     <meta property="og:title" content="Manovar App">
-    <meta property="og:description" content="Кликай на корабль!">
+    <meta property="og:description" content="Click the boat to earn coins!">
     <meta property="og:image" content="https://raw.githubusercontent.com/your-username/your-repo-name/main/images/manovar-app-thumbnail.jpg">
     <meta property="og:url" content="https://your-username.github.io/manovar-app/">
 </head>
@@ -18,7 +18,11 @@
         <div id="nickname-display"></div> <!-- New element to display the nickname -->
         <div id="score-board">Coins: <span id="score">0</span></div>
         <div id="game-area"></div>
-        <button id="start-button">Начать тапать</button>
+        <button id="start-button">Start Game</button>
+        <button id="music-toggle-button">Toggle Music</button> <!-- New button to toggle music -->
+        <audio id="background-music" loop>
+            <source src="audio/background-music.mp3" type="audio/mpeg">
+        </audio>
     </div>
     <script src="script.js"></script>
 </body>

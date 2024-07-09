@@ -1,5 +1,7 @@
 let score = 0;
 let currentBoatImage = 'images/boat1.png'; // Ensure this path is correct
+const backgroundMusic = document.getElementById('background-music');
+const musicToggleButton = document.getElementById('music-toggle-button');
 
 document.getElementById('start-button').addEventListener('click', startGame);
 document.getElementById('nickname-input').addEventListener('keypress', function(event) {
@@ -9,6 +11,7 @@ document.getElementById('nickname-input').addEventListener('keypress', function(
 });
 document.getElementById('game-area').addEventListener('touchstart', collectCoin); // Use touchstart for better mobile performance
 document.getElementById('game-area').addEventListener('click', collectCoin);
+musicToggleButton.addEventListener('click', toggleMusic);
 
 function startGame() {
     console.log("Start game button clicked");
@@ -24,6 +27,7 @@ function startGame() {
     nicknameInput.disabled = true; // Disable input after starting the game
     nicknameInput.style.display = 'none'; // Hide input after starting the game
     startButton.style.display = 'none'; // Hide the start button after starting the game
+    musicToggleButton.style.display = 'block'; // Show the music toggle button
     score = 0;
     currentBoatImage = 'images/boat1.png'; // Ensure this path is correct
     document.getElementById('score').textContent = score;
@@ -91,6 +95,16 @@ function updateBoatImage() {
     console.log("Updated boat image to", currentBoatImage);
 }
 
+function toggleMusic() {
+    if (backgroundMusic.paused) {
+        backgroundMusic.play();
+        musicToggleButton.textContent = 'Pause Music';
+    } else {
+        backgroundMusic.pause();
+        musicToggleButton.textContent = 'Play Music';
+    }
+}
+
 // Export functions for testing
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -98,6 +112,7 @@ if (typeof module !== 'undefined' && module.exports) {
         createBoat,
         collectCoin,
         updateBoatImage,
-        createSparkle
+        createSparkle,
+        toggleMusic
     };
 }
