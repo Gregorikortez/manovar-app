@@ -5,14 +5,6 @@ document.getElementById('start-button').addEventListener('click', startGame);
 document.getElementById('game-area').addEventListener('click', collectCoin);
 
 function startGame() {
-    const nicknameInput = document.getElementById('nickname-input');
-    const nickname = nicknameInput.value.trim();
-    if (nickname === "") {
-        alert("Please enter your nickname.");
-        return;
-    }
-    nicknameInput.disabled = true; // Disable input after starting the game
-    nicknameInput.style.display = 'none'; // Hide input after starting the game
     score = 0;
     currentBoatImage = 'boat1.png';
     document.getElementById('score').textContent = score;
@@ -36,7 +28,6 @@ function collectCoin(event) {
         document.getElementById('score').textContent = score;
         createSparkle(event.clientX, event.clientY);
         updateBoatImage();
-        updateScore(document.getElementById('nickname-input').value.trim(), score); // Update the score on the backend
     }
 }
 
@@ -73,19 +64,6 @@ function clearGameArea() {
     while (gameArea.firstChild) {
         gameArea.removeChild(gameArea.firstChild);
     }
-}
-
-function updateScore(nickname, score) {
-    fetch('http://your-vm-ip:3000/update-score', { // Replace with your VM's IP
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ nickname, score })
-    })
-    .then(response => response.text())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
 }
 
 // Export functions for testing
